@@ -18,3 +18,4 @@ to print attention values:
 
 to analyze the attention values, use scripts in "ana-att" 
 
+if you have any questions, please email zhangjingyizz@gmail.com
