@@ -1,0 +1,63 @@
+import sys
+def mread(file):
+    return open(file,'r',encoding='UTF8').readlines()             
+ls=mread(sys.argv[1])
+lv=mread(sys.argv[2])
+
+def mmax3(vv,sssize,jcomp):
+    toks=vv.strip().replace('[','').replace(']','').replace(',','').split(' ')
+    if len(toks)!=sssize:exit(1)  
+    maxn=0  
+    idx='none'
+    for i in range(jcomp):
+        tmp=float(toks[i+1])
+        if tmp>maxn:
+            maxn=tmp
+            idx=i+1    
+    return idx                
+def mprint(sssize,att, idx,d,ssalign,count,countall):
+    ones=att[idx].split('], [')   
+    gates=att[idx+1].strip().replace('[','').replace(']','').replace(',','').split(' ') 
+    if len(gates)!=8:exit(1)
+    k=-1
+    for i in range(8):        
+        for j in range(sssize):
+            k+=1
+            if float(gates[i])!=0:    
+                key=d+' '+str(i)                    
+                alignidx=mmax3(ones[k],sssize,j)           
+                if j>0 :
+                    if alignidx in ssalign[j]: 
+                       count[key][0]+=1                   
+                    if len(ssalign[j])>0:countall[key][0]+=1            
+    return 'done'
+kkk=0
+count={}
+countall={}
+for i in range(6):
+    for j in range(8):
+        count[str(i)+' '+str(j)]=[0]
+        countall[str(i)+' '+str(j)]=[0]
+
+for i in range(len(ls)):   
+   ssalign=[]
+   src='bos '+ls[i].strip()
+   src=src.strip().split(' ')            
+            
+   for j in range(len(src)):
+       ssalign.append({})
+   for j in range(len(src)-2):       
+          ssalign[j+2][j+1]='done'          
+   for j in range(6):                 
+       kkk+=2
+   for j in range(6):          
+       mprint(len(src),lv, kkk,str(j), ssalign,count,countall)    
+       kkk+=2             
+       kkk+=2
+
+for i in range(6):
+    for j in range(8):
+       print(i)
+       print(j)
+       print(count[str(i)+' '+str(j)])
+       print(countall[str(i)+' '+str(j)])

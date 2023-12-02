@@ -1,0 +1,28 @@
+import sys
+
+def mread(file):
+    fi=open(file,'r',encoding='UTF8')
+    li=fi.readlines()
+    fi.close()    
+    return li
+list=['deen','fren','roen','ende','enfr','enro']
+dict={}
+
+for i in range(6):
+    li=mread(sys.argv[1]+list[i]+sys.argv[2])
+    j=0
+    while j<len(li):        
+        key=li[j].strip()+' '+li[j+1].strip()
+        if not key in dict:dict[key]=[]
+        dict[key].append(li[j+2])   
+        dict[key].append(li[j+3])
+        dict[key].append(li[j+4])
+        dict[key].append(li[j+5]) 
+        dict[key].append(list[i])
+        dict[key].append("\n")
+        j+=6
+for k,v in dict.items():
+    print(k)
+    for i in range(len(v)):
+        print(v[i].strip())
+    print('---------------')

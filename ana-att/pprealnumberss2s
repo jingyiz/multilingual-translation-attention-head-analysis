@@ -1,0 +1,113 @@
+import sys
+
+
+
+
+
+
+
+
+
+
+
+
+def mread(file):
+    return open(file,'r',encoding='UTF8').readlines()             
+
+def mmax3(vv,sssize):
+    toks=vv.strip().replace('[','').replace(']','').replace(',','').split(' ')
+    if len(toks)!=sssize:exit(1)  
+    maxn=0  
+    idx='none'
+    for i in range(len(toks)-3):
+        tmp=float(toks[i+2])
+        if tmp>maxn:
+            maxn=tmp
+            idx=i+2    
+    return idx                
+def mprint(sssize,att, idx,d,ssalign,reals,count,countall,dis):
+    ones=att[idx].split('], [')   
+    gates=att[idx+1].strip().replace('[','').replace(']','').replace(',','').split(' ') 
+    if len(gates)!=8:exit(1)
+    k=-1
+    for i in range(8):        
+        for j in range(sssize):
+            k+=1
+            if float(gates[i])!=0:    
+                key=d+' '+str(i)                    
+                alignidx=mmax3(ones[k],sssize)           
+                if j>1 and j <sssize-1:
+                    if reals[alignidx] in ssalign[reals[j]]: 
+                       count[key][0]+=1  
+                    if j+dis >0 and j+dis<len(reals) and reals[j+dis] in ssalign[reals[j]]:
+                       count[key][1]+=1
+                    if j-dis>0 and j-dis<len(reals)  and reals[j-dis] in ssalign[reals[j]]:
+                       count[key][2]+=1             
+                    if len(ssalign[reals[j]])>0:countall[key][0]+=1            
+    return 'done'
+
+def jcheck(ls,lv,la,head,dis):
+ kkk=0
+ count={}
+ countall={}
+ for i in range(6):
+    for j in range(8):
+        count[str(i)+' '+str(j)]=[0,0,0]
+        countall[str(i)+' '+str(j)]=[0.0]
+ zjy='sdfskfjalskjfd'
+ for i in range(len(ls)):
+   toks=la[i].strip().split(' ')
+   ssalign=[]
+   src='bos '+ls[i].strip()+' eos'
+   src=src.replace('@@ ',zjy).strip().split(' ')            
+   reals=[]   
+   for j in range(len(src)):
+       tmp=src[j].split(zjy)
+       for ppp in range(len(tmp)):
+           reals.append(j-2)         
+   for j in range(len(src)-3):
+       ssalign.append({})
+   for j in range(len(toks)):
+       tmp=toks[j].split('-')       
+       if len(tmp)==2:ssalign[int(tmp[1])][int(tmp[0])]='done'            
+   for j in range(6):
+       mprint(len(reals),lv, kkk,str(j), ssalign,reals,count,countall,dis)          
+       kkk+=2
+   for j in range(6):              
+       kkk+=2             
+       kkk+=2
+ for i in range(6):
+    for j in range(8):
+       key=str(i)+' '+str(j)
+       yes=count[key]
+       totaln=countall[key][0]
+       if totaln!=0:
+         
+          if yes[0]/totaln > yes[1]/totaln+0.1:
+            if  yes[0]/totaln > yes[2]/totaln+0.1:
+              print(i)
+              print(j)
+              print(count[key])
+              print(countall[key])
+              print(head)              
+              print(dis)
+         
+
+
+
+    
+
+
+
+
+
+
+ 
+ls=mread(sys.argv[1])
+lv=mread(sys.argv[2])
+ld=mread(sys.argv[3]+'.parsep.deps.need')
+for i in range(len(ld)):
+    toks=ld[i].strip().split()
+    if len(toks)==2:
+       jcheck(ls,lv,mread(sys.argv[3]+'.'+str(i)+'f'),toks[0]+'-f',int(toks[1]))  
+       jcheck(ls,lv,mread(sys.argv[3]+'.'+str(i)+'b'),toks[0]+'-b',int(toks[1]))     

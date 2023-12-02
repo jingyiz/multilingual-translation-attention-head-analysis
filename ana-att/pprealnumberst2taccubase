@@ -1,0 +1,71 @@
+import sys
+
+
+
+
+def mread(file):
+    return open(file,'r',encoding='UTF8').readlines()                             
+def mprint(sssize,att, idx,d,ssalign,reals,count,countall,dis):
+    ones=att[idx].split('], [')   
+    gates=att[idx+1].strip().replace('[','').replace(']','').replace(',','').split(' ') 
+    if len(gates)!=8:exit(1)
+    k=-1
+    for i in range(8):        
+        for j in range(sssize):
+            k+=1
+            if i==0:    
+                key=d+' '+str(i)                    
+                           
+                if j>0:
+                      
+                    if j+dis >0 and j+dis<len(reals) and reals[j+dis] in ssalign[reals[j]]:
+                       count[0]+=1
+                    if j-dis>0 and j-dis<len(reals)  and reals[j-dis] in ssalign[reals[j]]:
+                       count[1]+=1             
+                    if len(ssalign[reals[j]])>0:countall[0]+=1            
+    return 'done'
+
+def jcheck(ls,lv,la,head,dis):
+ kkk=0
+ count=[0,0]
+ countall=[0.0]
+ 
+        
+ zjy='sdfskfjalskjfd'
+ for i in range(len(ls)):
+   toks=la[i].strip().split(' ')
+   ssalign=[]
+   src='bos '+ls[i].strip()
+   src=src.replace('@@ ',zjy).strip().split(' ')            
+   reals=[]   
+   for j in range(len(src)):
+       tmp=src[j].split(zjy)
+       for ppp in range(len(tmp)):
+           reals.append(j-1)         
+   for j in range(len(src)-1):
+       ssalign.append({})
+   for j in range(len(toks)):
+       tmp=toks[j].split('-')       
+       if len(tmp)==2:
+           if int(tmp[0])<int(tmp[1]):ssalign[int(tmp[1])][int(tmp[0])]='done'            
+   for j in range(6):                 
+       kkk+=2
+   for j in range(6):        
+       if j==0:mprint(len(reals),lv, kkk,str(j), ssalign,reals,count,countall,dis)         
+       kkk+=2             
+       kkk+=2            
+ if countall[0]>100:     
+              print("\n")                            
+              print(head)              
+              print(count[0]/countall[0])
+              print(count[1]/countall[0])
+              print("\n")
+         
+ls=mread(sys.argv[1])
+lv=mread(sys.argv[2])
+ld=mread(sys.argv[3]+'.parsep.deps.need')
+for i in range(len(ld)):
+    toks=ld[i].strip().split()
+    if len(toks)==2:
+       jcheck(ls,lv,mread(sys.argv[3]+'.'+str(i)+'f'),toks[0]+'-f',int(toks[1]))  
+       jcheck(ls,lv,mread(sys.argv[3]+'.'+str(i)+'b'),toks[0]+'-b',int(toks[1]))     

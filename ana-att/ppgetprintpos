@@ -1,0 +1,28 @@
+import sys
+
+
+
+
+def mread(file):
+    fi=open(file,'r',encoding='UTF8')
+    li=fi.readlines()
+    fi.close()    
+    return li
+list=['deen','fren','roen','ende','enfr','enro']
+dict={}
+for i in range(6):
+    li=mread(sys.argv[1]+list[i]+sys.argv[2])
+    j=0
+    while j<len(li):
+        aa=li[j+2].strip()
+        bb=li[j+3].strip()
+        if bb!='[0]':score=float(aa[1:-1])/float(bb[1:-1])
+        else:score=0
+        if score > 0.8:
+            key=li[j].strip()+' '+li[j+1].strip()
+            if not key in dict:dict[key]=[]
+            dict[key].append(list[i])
+        j+=4
+for k,v in dict.items():
+    print(k)
+    print(v)

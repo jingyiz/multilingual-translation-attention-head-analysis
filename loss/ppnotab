@@ -1,0 +1,24 @@
+import sys
+
+def mread(file):
+    fi=open(file,'r',encoding='UTF8')
+    li=fi.readlines()
+    fi.close()    
+    return li
+
+li=mread(sys.argv[1])
+
+fo=open(sys.argv[1]+'.notab','w',encoding='UTF8')
+
+
+for i in range(len(li)):
+    fo.write(li[i].replace('\t',' '))
+
+    
+
+
+
+
+
+
+fo.close()

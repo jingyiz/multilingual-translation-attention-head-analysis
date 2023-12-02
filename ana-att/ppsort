@@ -1,0 +1,25 @@
+import sys
+
+def mread(file):
+    fi=open(file,'r',encoding='UTF8')
+    li=fi.readlines()
+    fi.close()    
+    return li
+
+ls=mread(sys.argv[1])
+lt=mread(sys.argv[2])
+la=mread(sys.argv[3])
+lds=mread(sys.argv[4])
+ldt=mread(sys.argv[5])
+
+fo=open(sys.argv[6],'w',encoding='UTF8')
+dict={}
+
+for i in range(len(ls)):
+  dict[ls[i].strip()+'|||'+lt[i].strip()]=la[i]
+for i in range(len(lds)):
+  fo.write(dict[lds[i].strip()+'|||'+ldt[i].strip()])
+
+fo.close()
+
+

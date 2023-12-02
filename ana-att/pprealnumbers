@@ -1,0 +1,120 @@
+import sys
+import nltk
+from nltk.corpus import stopwords
+
+srcstops = set(stopwords.words(sys.argv[5]))
+tgtstops = set(stopwords.words(sys.argv[6]))
+
+
+
+
+
+
+
+
+
+
+
+def mread(file):
+    return open(file,'r',encoding='UTF8').readlines()             
+ls=mread(sys.argv[1])
+lt=mread(sys.argv[2])
+lv=mread(sys.argv[3])
+la=mread(sys.argv[4])
+
+
+def getno(aa):
+    r=[]    
+    for i in range(aa):
+        r.append([])
+        for j in range(8):
+            r[-1].append('no')
+    return r
+def mmax3(vv,ttsize):
+    toks=vv.strip().replace('[','').replace(']','').replace(',','').split(' ')
+    if len(toks)!=ttsize:exit(1)  
+    maxn=0  
+    idx='none'
+    for i in range(len(toks)-3):
+        tmp=float(toks[i+2])
+        if tmp>maxn:
+            maxn=tmp
+            idx=i+2    
+    return idx                
+def mprint(sssize,ttsize,att, idx,d,tgtalign,reals,realt,isright,nextright):
+    ones=att[idx].split('], [')   
+    gates=att[idx+1].strip().replace('[','').replace(']','').replace(',','').split(' ') 
+    if len(gates)!=8:exit(1)
+    k=-1
+    for i in range(8):        
+        for j in range(sssize):
+            k+=1
+            if float(gates[i])!=0:    
+                key=d+' '+str(i)                                
+                alignidx=mmax3(ones[k],ttsize)                         
+                if j>0:
+                    if reals[alignidx] in tgtalign[realt[j]]: 
+                        isright[realt[j]][i]='yes'                             
+                    
+                if realt[j]+1<len(tgtalign):
+                    if reals[alignidx] in tgtalign[realt[j]+1]: 
+                        nextright[realt[j]+1][i]='yes'                        
+                    
+    return 'done'
+kkk=0
+count={}
+countall={}
+
+for i in range(6):
+    for j in range(8):
+        count[str(i)+' '+str(j)]=[0,0,0]
+        countall[str(i)+' '+str(j)]=[0,0]
+zjy='sdfskfjalskjfd'
+for i in range(len(ls)):
+   toks=la[i].replace('p','-').strip().split(' ')
+   tgtalign=[]
+   src='bos '+ls[i].strip()+' eos'
+   src=src.replace('@@ ',zjy).strip().split(' ')         
+   tgt='bos '+lt[i].strip()
+   tgt=tgt.replace('@@ ',zjy).strip().split(' ')
+   reals=[]
+   realt=[]
+   
+   for j in range(len(src)):
+       tmp=src[j].split(zjy)
+       for ppp in range(len(tmp)):
+           reals.append(j-2)
+   for j in range(len(tgt)):
+       tmp=tgt[j].split(zjy)
+       for ppp in range(len(tmp)):           
+           realt.append(j-1)           
+   for j in range(len(tgt)-1):
+       tgtalign.append({})
+   for j in range(len(toks)):
+       tmp=toks[j].split('-')
+       if src[int(tmp[0])-1+2].replace(zjy,'') not in srcstops:
+           if tgt[int(tmp[1])-1+1].replace(zjy,'') not in tgtstops:
+                tgtalign[int(tmp[1])-1][int(tmp[0])-1]='done'            
+   for j in range(6):              
+       kkk+=2
+   for j in range(6):              
+       kkk+=2   
+       isright=getno(len(tgtalign))
+       nextright=getno(len(tgtalign))   
+       mprint(len(realt),len(reals),lv, kkk,str(j), tgtalign,reals,realt,isright,nextright)
+       for uuu in range(len(isright)):
+          for vvv in range(8):
+              key=str(j)+' '+str(vvv)
+              if isright[uuu][vvv]=='yes':count[key][0]+=1
+              if nextright[uuu][vvv]=='yes':count[key][1]+=1
+              if len(tgtalign[uuu])>0:
+                    countall[key][0]+=1
+                    countall[key][1]+=1
+       kkk+=2
+
+for i in range(6):
+    for j in range(8):
+       print(i)
+       print(j)
+       print(count[str(i)+' '+str(j)])
+       print(countall[str(i)+' '+str(j)])

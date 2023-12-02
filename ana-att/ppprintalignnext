@@ -1,0 +1,32 @@
+import sys
+
+
+def mread(file):
+    fi=open(file,'r',encoding='UTF8')
+    li=fi.readlines()
+    fi.close()    
+    return li
+list=['deen','fren','roen','ende','enfr','enro']
+def mget(pref,postf,list,dict):
+  for i in range(6):
+    li=mread(pref+list[i]+postf)
+    j=0
+    while j<len(li):        
+        key=li[j].strip()+' '+li[j+1].strip()
+        aa=li[j+2].strip().split(' ')[1]
+        bb=li[j+3].strip().split(' ')[1]    
+        if bb[:-1]=='0':score=0
+        else:score=float(aa[:-1])/float(bb[:-1])         
+        if not key in dict:dict[key]=[]
+        dict[key].append(score)           
+        j+=4
+dictnogate={}
+
+mget(sys.argv[1]+'nogate', sys.argv[2],list,dictnogate)
+
+for k,v in dictnogate.items():
+    for i in range(len(v)):
+        if v[i]>0.6:           
+           print(k)
+           print(v)
+           break  
