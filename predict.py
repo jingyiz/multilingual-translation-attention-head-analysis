@@ -45,7 +45,9 @@ vcbt = reverse_dict(vcbt)
 
 
 if len(sys.argv) == 4:
-	mymodel = NMT(cnfg.isize,cnfg.cnnnum,cnfg.cnnnumdec, nwordi, nwordt, cnfg.nlayer, cnfg.ff_hsize, cnfg.drop, cnfg.attn_drop, cnfg.share_emb, cnfg.nhead, cache_len_default, cnfg.attn_hsize, cnfg.norm_output, cnfg.bindDecoderEmb, cnfg.forbidden_indexes)
+	if cnfg.jweight==0:nogate=True
+	else:nogate=False
+	mymodel = NMT(nogate,cnfg.isize,cnfg.cnnnum,cnfg.cnnnumdec, nwordi, nwordt, cnfg.nlayer, cnfg.ff_hsize, cnfg.drop, cnfg.attn_drop, cnfg.share_emb, cnfg.nhead, cache_len_default, cnfg.attn_hsize, cnfg.norm_output, cnfg.bindDecoderEmb, cnfg.forbidden_indexes)
 
 	mymodel = load_model_cpu(sys.argv[3], mymodel)
 	mymodel.apply(load_fixing)
