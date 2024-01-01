@@ -13,6 +13,9 @@ the model configuration file is cnfg/base.py including training/valid data path
 
 to perform head pruning, you need to set the regularization loss weight (jweight) in cnfg/base.py
 
+to perform translation:
+bash scripts/mktest.sh
+
 to print attention values:
 ./printatt.sh
 
